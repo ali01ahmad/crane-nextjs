@@ -1,4 +1,4 @@
-import NextAuth, { SessionStrategy } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
@@ -42,6 +42,7 @@ const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// Only export GET and POST for Next.js API route
+// Correct exports for Next.js App Router
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export const GET = handler;
+export const POST = handler;
