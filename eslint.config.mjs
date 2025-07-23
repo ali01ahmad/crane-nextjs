@@ -15,7 +15,7 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-var-requires": "off", // ✅ allow require()
       "no-console": "warn", // optional: allow console.log without errors
-      ignoreDuringBuilds: "off", // optional: ignore console logs during production builds
+      ignoreDuringBuilds: true, // optional: ignore console logs during production builds
     },
   },
 ];
