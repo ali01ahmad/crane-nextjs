@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { SessionStrategy } from "next-auth";
-import prisma from '../../../../lib/prisma'; 
+import prisma from "@/lib/prisma"; // ✅ use @ alias if configured
 import bcrypt from "bcryptjs";
 
-export const authOptions = {
+// Define auth options with proper typing
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -14,7 +14,7 @@ export const authOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
@@ -24,17 +24,26 @@ export const authOptions = {
         if (!user || !user.password) return null;
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
-        //if (!isValid) return null;
+        if (!isValid) return null;
 
-        return user;
+        // Return user object with id as string to match NextAuth User type
+        return {
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          emailVerified: user.emailVerified,
+        };
       },
     }),
   ],
   session: {
-     strategy: "jwt" as SessionStrategy,
+    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
+// Export GET and POST handlers for Next.js App Router
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+
