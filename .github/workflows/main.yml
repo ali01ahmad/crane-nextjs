@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Use Node.js 18.x
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -23,7 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Next.js app
+      - name: Run lint
+        run: npm run lint
+
+      - name: Build the app
         run: npm run build
 
       - name: Run tests
