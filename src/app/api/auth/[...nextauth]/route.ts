@@ -1,11 +1,11 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { SessionStrategy } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@/lib/prisma"; // ✅ use @ alias if configured
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-// Define auth options with proper typing
-export const authOptions: NextAuthOptions = {
+// Define auth options
+const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
 
-        // Return user object with id as string to match NextAuth User type
         return {
           id: user.id.toString(),
           name: user.name,
@@ -43,7 +42,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// Export GET and POST handlers for Next.js App Router
+// Only export GET and POST for Next.js API route
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
-
