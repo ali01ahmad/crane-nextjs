@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime @default(now())
+  role          Role[]   @relation("UserRoles")
+  inspections   Inspection[]
+}
+
+model Role {
+  id         Int    @id @default(autoincrement())
+  name       String
+  permission String
+  userId     Int
+  user       User   @relation("UserRoles", fields: [userId], references: [id])
+}
+
+model Inspection {
+  id          Int      @id @default(autoincrement())
+  name        String
+  comments    String
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  craneId     Int
+  crane       Crane    @relation(fields: [craneId], references: [id])
+  items       Inspection_list[]
+}
+
+model Crane {
+  id            Int      @id @default(autoincrement())
+  serial_number String
+  model         String
+  location      String
+  status        String   @default("Active")
+  createdAt     DateTime @default(now())
+  inspections   Inspection[]
+}
+
+model Inspection_list {
+  id           Int         @id @default(autoincrement())
+  inspectionId Int
+  inspection   Inspection  @relation(fields: [inspectionId], references: [id])
+  item         String
+  remarks      String
+  createdAt    DateTime    @default(now())
+}
