@@ -22,6 +22,9 @@ const customJestConfig = {
     '!src/graphql/schema/*.ts',   // skip schema
     '!src/lib/*.ts',              // skip config files
   ],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
   coverageReporters: ['text', 'lcov'],
 };
 
