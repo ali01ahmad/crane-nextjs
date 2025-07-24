@@ -15,6 +15,14 @@ import { useRouter } from 'next/navigation';
 import { useDispatch,useSelector } from 'react-redux';
 import { useUsers } from '@/hook/useUser';
 
+// Define the User type if not imported from elsewhere
+type User = {
+  id: string | number;
+  name: string;
+  email: string;
+  role?: string;
+};
+
 
 export default function InspectionPage({ }) {
 
@@ -53,7 +61,7 @@ export default function InspectionPage({ }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.map((user) => (
+                        {users.map((user: User) => (
                             <TableRow key={user.id}>
                                 <TableCell>{user.id}</TableCell>
                                 <TableCell>{user.name}</TableCell>
