@@ -1,9 +1,8 @@
-const { PrismaClient } = await import('../../../src/generated/prisma/index.js');
+import { PrismaClient } from '../../../src/generated/prisma/index.js';
 
 const prisma = new PrismaClient();
-console.log('resolver')
+
 export const resolvers = {
-  
   Query: {
     users: async () => await prisma.user.findMany(),
     cranes: async () => await prisma.crane.findMany(),
