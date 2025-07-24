@@ -16,6 +16,14 @@ import { useRouter } from 'next/navigation';
 import { useDispatch,useSelector } from 'react-redux';
 import { useUsers } from '@/hook/useUser';
 
+// Define the User type according to your user object structure
+type User = {
+  id: string | number;
+  name: string;
+  email: string;
+  role: string;
+};
+
 
 
 export default function UserPage() {
@@ -58,14 +66,14 @@ export default function UserPage() {
             </TableHead>
             <TableBody>
               {/* Map through user data and create table rows */}
-              {users.map((user) => (
+                {users.map((user: User) => (
                 <TableRow key={user.id}>
                   <TableCell>{user.id}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
                 </TableRow>
-              ))}
+                ))}
             </TableBody>
           </Table>
         </Box>
